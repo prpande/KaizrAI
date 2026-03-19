@@ -15,7 +15,7 @@ start_run() {
     local today; today="$(today_local)"
 
     local sql="INSERT INTO runs (date, automation, started_at, status)
-        VALUES ('$today', $(sql_nullable "$automation"), '$now', 'running');"
+        VALUES ($(sql_nullable "$today"), $(sql_nullable "$automation"), $(sql_nullable "$now"), 'running');"
 
     local select_sql="SELECT * FROM runs WHERE id = last_insert_rowid();"
 
@@ -62,7 +62,7 @@ complete_run() {
     started_epoch="$(datetime_to_epoch "$started_at")"
     duration=$(( now_epoch - started_epoch ))
 
-    local sql="UPDATE runs SET status = 'completed', completed_at = '$now', steps_completed = $(sql_nullable "$steps_completed"), steps_skipped = $(sql_nullable "$steps_skipped"), notes = $(sql_nullable "$notes"), duration_seconds = $duration WHERE id = $id;"
+    local sql="UPDATE runs SET status = 'completed', completed_at = $(sql_nullable "$now"), steps_completed = $(sql_nullable "$steps_completed"), steps_skipped = $(sql_nullable "$steps_skipped"), notes = $(sql_nullable "$notes"), duration_seconds = $duration WHERE id = $id;"
     local select_sql="SELECT * FROM runs WHERE id = $id;"
 
     local record
@@ -109,7 +109,7 @@ fail_run() {
     started_epoch="$(datetime_to_epoch "$started_at")"
     duration=$(( now_epoch - started_epoch ))
 
-    local sql="UPDATE runs SET status = '$new_status', completed_at = '$now', error_details = $(sql_nullable "$error"), steps_completed = $(sql_nullable "$steps_completed"), duration_seconds = $duration WHERE id = $id;"
+    local sql="UPDATE runs SET status = '$new_status', completed_at = $(sql_nullable "$now"), error_details = $(sql_nullable "$error"), steps_completed = $(sql_nullable "$steps_completed"), duration_seconds = $duration WHERE id = $id;"
     local select_sql="SELECT * FROM runs WHERE id = $id;"
 
     local record
@@ -140,7 +140,7 @@ list_runs() {
     [[ -n "$automation" ]] && where_clauses="$where_clauses AND automation = $(sql_nullable "$automation")"
     [[ -n "$start_date" ]] && where_clauses="$where_clauses AND date >= $(sql_nullable "$start_date")"
     [[ -n "$end_date" ]] && where_clauses="$where_clauses AND date <= $(sql_nullable "$end_date")"
-    [[ -n "$status" ]] && where_clauses="$where_clauses AND status = '$status'"
+    [[ -n "$status" ]] && where_clauses="$where_clauses AND status = $(sql_nullable "$status")"
 
     if [[ -n "$where_clauses" ]]; then
         where_clauses="WHERE ${where_clauses# AND }"
