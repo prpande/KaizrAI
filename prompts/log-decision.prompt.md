@@ -15,7 +15,7 @@ Record a decision with its rationale and alternatives for future reference.
    - **Stakeholders**: Who was involved? (optional)
 2. Auto-fill date to today unless specified
 3. If a related todo exists, link it
-4. Log via `bash scripts/workspace-db.sh --action log-decision`
+4. Log via `bash scripts/workspace-db.sh --action log-decision`. If the command fails, report the error and do not display the success output.
 
 ## Output
 "📝 Decision logged:"

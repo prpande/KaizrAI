@@ -9,13 +9,14 @@ Overview of open PRs — what needs action, what's on track.
 - Memory: `{DATA_DIR}/memory/stable/team.md` for team repos and teammates
 
 ## Instructions
-1. Read user identity and team info from memory files
-2. If `gh auth status` fails, output: "GitHub CLI not authenticated. Run: gh auth login"
-3. If authenticated, query for:
+1. Read `.env` to get `WORKSPACE_DATA_DIR`
+2. Read user identity and team info from memory files
+3. If `gh auth status` fails, output: "GitHub CLI not authenticated. Run: gh auth login"
+4. If authenticated, query for:
    - `gh pr list --author @me --state open --json number,title,createdAt,reviewDecision,statusCheckRollup,url`
    - `gh pr list --search "review-requested:@me" --state open --json number,title,author,url`
    - `gh pr list --state open --json number,title,author,url` (for team awareness, filter by team repos from memory)
-4. For each PR, flag:
+5. For each PR, flag:
    - 🔴 Stale (>3 days no activity)
    - 🔴 Failing CI
    - 🟡 Missing reviews (no approvals yet)

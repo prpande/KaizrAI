@@ -17,7 +17,7 @@ Provide a delta-based status summary since the last check-in, readable in 30 sec
    - Todos completed or cancelled
    - Todos that became overdue
 4. Check for stale items (last_touched > 7 days)
-5. If `gh` CLI is authenticated, check for:
+5. Run `gh auth status`; if it fails, skip GitHub steps and note "GitHub CLI not authenticated". If authenticated, check for:
    - Open PRs authored by the user: `gh pr list --author @me --state open --json number,title,createdAt,reviewDecision,statusCheckRollup`
    - PRs awaiting the user's review: `gh pr list --search "review-requested:@me" --state open --json number,title,author`
    - Flag: stale >3 days, failing CI, missing reviews
