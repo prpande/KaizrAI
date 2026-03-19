@@ -4,7 +4,7 @@
 Capture an urgent incoming item and re-prioritize the day's plan.
 
 ## Context
-- Database: `todos.db` via `bash scripts/workspace-db.sh`
+- Database: `todos.db` via `bash scripts/workspace-db.sh --action list-todos`
 - Memory: `{DATA_DIR}/memory/active/weekly-context.md`
 
 ## Instructions

@@ -4,8 +4,8 @@
 Surface recently completed work that might deserve an accomplishment log entry.
 
 ## Context
-- Database: `todos.db` via `bash scripts/workspace-db.sh`
-- Database: `accomplishments.db` via `bash scripts/workspace-db.sh`
+- Database: `todos.db` via `bash scripts/workspace-db.sh --action list-todos`
+- Database: `accomplishments.db` via `bash scripts/workspace-db.sh --action list-accomplishments`
 
 ## Instructions
 1. Query todos completed since last check-in (or last 24 hours if no prior run data)

@@ -4,8 +4,8 @@
 End-of-day close-out — review what got done, flag what slipped, capture accomplishments. 2 minutes max.
 
 ## Context
-- Database: `todos.db` via `bash scripts/workspace-db.sh`
-- Database: `accomplishments.db` via `bash scripts/workspace-db.sh`
+- Database: `todos.db` via `bash scripts/workspace-db.sh --action list-todos`
+- Database: `accomplishments.db` via `bash scripts/workspace-db.sh --action log-accomplishment`
 - Memory: `{DATA_DIR}/memory/active/weekly-context.md`
 
 ## Instructions
