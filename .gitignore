@@ -1,0 +1,26 @@
+# Personal data (lives in cloud drive, not repo)
+.env
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Editor
+.vscode/
+*.swp
+*.swo
+
+# Any local database files (should be in data dir, not repo)
+*.db
+*.db-wal
+*.db-shm
+
+# Logs
+*.log
+
+# Node modules (if any tooling is added later)
+node_modules/
+
+# Plan files (implementation artifacts, not part of the workspace)
+plan/
+docs/superpowers/
