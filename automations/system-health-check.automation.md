@@ -39,6 +39,8 @@ Apply fixes for clear issues:
 - Correct formatting inconsistencies
 - Report each fix made
 
+Before applying any fix, briefly state what will be changed and confirm with the user. Do not auto-apply fixes that could mask a real misconfiguration (e.g., a 'broken' file path may indicate a genuinely missing file).
+
 ### Step 7: Improvement Suggestions
 Categorize findings:
 - **🔴 Critical**: Broken references, corrupt databases, inaccessible data dir
@@ -48,9 +50,10 @@ Categorize findings:
 ### Step 8: Update ROADMAP.md
 - Add any new improvement ideas to the Backlog section
 - Move completed items to Completed section
+- If `ROADMAP.md` does not exist, create it with the standard structure rather than failing.
 
 ### Step 9: Record Completion
-- Run `bash scripts/workspace-db.sh --action complete-run --params '{"id":"<id>","steps_completed":"<list>"}'`
+- Run `bash scripts/workspace-db.sh --action complete-run --params '{"id":"<id>","steps_completed":"<list>","steps_skipped":"<list>"}'`
 
 ## Error Handling
 - If databases are inaccessible, report as critical and stop — don't attempt fixes

@@ -12,6 +12,7 @@ End-of-week retrospective — what got done, what's trending, what needs attenti
 ### Step 2: Week in Numbers
 - Run `bash scripts/workspace-db.sh --action stats`
 - Compare against last week's run (query automation-runs for last weekly-review)
+- If no prior weekly-review run exists, note this is the first weekly review and skip the comparison.
 - Calculate:
   - Todos added this week vs completed this week (throughput ratio)
   - Accomplishments logged this week
@@ -40,12 +41,13 @@ End-of-week retrospective — what got done, what's trending, what needs attenti
 
 ### Step 7: Update Context
 - Refresh `memory/active/weekly-context.md`:
+  - Before restructuring, verify the file exists and has content. If Step 7 fails mid-operation, report the error and leave the file unchanged — do not partially rewrite it.
   - Archive this week's daily notes (move to a `### Week of [date]` section)
   - Start fresh active section for next week
 - Update `memory/active/current-sprint.md` if sprint boundaries align
 
 ### Step 8: Record Completion
-- Run `bash scripts/workspace-db.sh --action complete-run --params '{"id":"<id>","steps_completed":"<list>"}'` with full step details
+- Run `bash scripts/workspace-db.sh --action complete-run --params '{"id":"<id>","steps_completed":"<list>","steps_skipped":"<list>"}'` with full step details
 
 ## Error Handling
 - Standard pattern — log, skip, continue
