@@ -24,7 +24,7 @@ log_decision() {
     local rtid_sql; rtid_sql="$(sql_nullable "$related_todo_id")"
 
     local sql="INSERT INTO decisions (date, context, decision, rationale, alternatives, stakeholders, tags, related_todo_id)
-        VALUES ('$dec_date', $(sql_nullable "$context"), $(sql_nullable "$decision"), $(sql_nullable "$rationale"), $(sql_nullable "$alternatives"), $(sql_nullable "$stakeholders"), $(sql_nullable "$tags"), $rtid_sql);"
+        VALUES ($(sql_nullable "$dec_date"), $(sql_nullable "$context"), $(sql_nullable "$decision"), $(sql_nullable "$rationale"), $(sql_nullable "$alternatives"), $(sql_nullable "$stakeholders"), $(sql_nullable "$tags"), $rtid_sql);"
 
     local select_sql="SELECT * FROM decisions WHERE id = last_insert_rowid();"
 
@@ -54,8 +54,8 @@ list_decisions() {
     validate_integer "limit" "$limit" "list-decisions"
 
     local where_clauses=""
-    [[ -n "$start_date" ]] && where_clauses="$where_clauses AND date >= '$start_date'"
-    [[ -n "$end_date" ]] && where_clauses="$where_clauses AND date <= '$end_date'"
+    [[ -n "$start_date" ]] && where_clauses="$where_clauses AND date >= $(sql_nullable "$start_date")"
+    [[ -n "$end_date" ]] && where_clauses="$where_clauses AND date <= $(sql_nullable "$end_date")"
     if [[ -n "$search" ]]; then
         local escaped_search
         escaped_search="$(sql_escape_like "$search")"

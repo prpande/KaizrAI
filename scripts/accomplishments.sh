@@ -26,7 +26,7 @@ log_accomplishment() {
     local rtid_sql; rtid_sql="$(sql_nullable "$related_todo_id")"
 
     local sql="INSERT INTO accomplishments (date, category, title, description, impact, links, tags, related_todo_id)
-        VALUES ('$acc_date', $(sql_nullable "$category"), $(sql_nullable "$title"), $(sql_nullable "$description"), $(sql_nullable "$impact"), $(sql_nullable "$links"), $(sql_nullable "$tags"), $rtid_sql);"
+        VALUES ($(sql_nullable "$acc_date"), $(sql_nullable "$category"), $(sql_nullable "$title"), $(sql_nullable "$description"), $(sql_nullable "$impact"), $(sql_nullable "$links"), $(sql_nullable "$tags"), $rtid_sql);"
 
     local select_sql="SELECT * FROM accomplishments WHERE id = last_insert_rowid();"
 
@@ -58,9 +58,9 @@ list_accomplishments() {
     validate_integer "limit" "$limit" "list-accomplishments"
 
     local where_clauses=""
-    [[ -n "$start_date" ]] && where_clauses="$where_clauses AND date >= '$start_date'"
-    [[ -n "$end_date" ]] && where_clauses="$where_clauses AND date <= '$end_date'"
-    [[ -n "$category" ]] && where_clauses="$where_clauses AND category = '$category'"
+    [[ -n "$start_date" ]] && where_clauses="$where_clauses AND date >= $(sql_nullable "$start_date")"
+    [[ -n "$end_date" ]] && where_clauses="$where_clauses AND date <= $(sql_nullable "$end_date")"
+    [[ -n "$category" ]] && where_clauses="$where_clauses AND category = $(sql_nullable "$category")"
     if [[ -n "$tags" ]]; then
         local escaped_tags
         escaped_tags="$(sql_escape_like "$tags")"
@@ -92,7 +92,7 @@ export_accomplishments() {
     validate_required "end_date" "$end_date" "export-accomplishments"
 
     local sql="SELECT date, category, title, impact, description FROM accomplishments
-        WHERE date BETWEEN '$start_date' AND '$end_date'
+        WHERE date BETWEEN $(sql_nullable "$start_date") AND $(sql_nullable "$end_date")
         ORDER BY category, date ASC;"
 
     local records

@@ -137,9 +137,9 @@ list_runs() {
     validate_integer "limit" "$limit" "list-runs"
 
     local where_clauses=""
-    [[ -n "$automation" ]] && where_clauses="$where_clauses AND automation = '$automation'"
-    [[ -n "$start_date" ]] && where_clauses="$where_clauses AND date >= '$start_date'"
-    [[ -n "$end_date" ]] && where_clauses="$where_clauses AND date <= '$end_date'"
+    [[ -n "$automation" ]] && where_clauses="$where_clauses AND automation = $(sql_nullable "$automation")"
+    [[ -n "$start_date" ]] && where_clauses="$where_clauses AND date >= $(sql_nullable "$start_date")"
+    [[ -n "$end_date" ]] && where_clauses="$where_clauses AND date <= $(sql_nullable "$end_date")"
     [[ -n "$status" ]] && where_clauses="$where_clauses AND status = '$status'"
 
     if [[ -n "$where_clauses" ]]; then
