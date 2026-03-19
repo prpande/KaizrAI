@@ -94,7 +94,7 @@ db_write() {
     local db_path="$1"
     local sql="$2"
     _ensure_journal_mode "$db_path"
-    if ! sqlite3 "$db_path" "BEGIN IMMEDIATE; $sql COMMIT;" 2>&1; then
+    if ! sqlite3 "$db_path" "BEGIN IMMEDIATE; $sql; COMMIT;" > /dev/null 2>&1; then
         json_error "Database write failed"
         return 1
     fi
@@ -112,7 +112,6 @@ db_write_and_return() {
 BEGIN IMMEDIATE;
 $write_sql
 COMMIT;
-.headers on
 $select_sql
 EOF
     2>&1)"; then
@@ -246,6 +245,10 @@ sql_nullable() {
 }
 
 # Escape a value for use in SQL LIKE patterns. Escapes %, _, and '.
+# IMPORTANT: Callers MUST include ESCAPE '\' in the LIKE expression, e.g.:
+#   sql_escape_like "$term" → escaped
+#   WHERE col LIKE '%' || '$escaped' || '%' ESCAPE '\'
+# Without ESCAPE '\', backslash-escaped wildcards are NOT treated as literals.
 sql_escape_like() {
     local value="$1"
     # Escape single quotes
