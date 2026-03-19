@@ -7,6 +7,7 @@ End-of-week retrospective — what got done, what's trending, what needs attenti
 
 ### Step 1: Record Run
 - Run `bash scripts/workspace-db.sh --action start-run --params '{"automation":"weekly-review"}'`
+- Save the returned run ID for later
 
 ### Step 2: Week in Numbers
 - Run `bash scripts/workspace-db.sh --action stats`

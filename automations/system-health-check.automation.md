@@ -7,6 +7,7 @@ Periodic self-audit — verify workspace consistency, fix issues, suggest improv
 
 ### Step 1: Record Run
 - Run `bash scripts/workspace-db.sh --action start-run --params '{"automation":"system-health-check"}'`
+- Save the returned run ID for later
 
 ### Step 2: Database Health
 - Run `bash scripts/workspace-db.sh --action health`

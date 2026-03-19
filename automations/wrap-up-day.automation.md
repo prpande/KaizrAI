@@ -7,6 +7,7 @@ End-of-day close-out — review, log, prepare for tomorrow.
 
 ### Step 1: Record Run
 - Run `bash scripts/workspace-db.sh --action start-run --params '{"automation":"wrap-up-day"}'`
+- Save the returned run ID for later
 
 ### Step 2: Day Review
 - Execute `wrap-up.prompt.md`
