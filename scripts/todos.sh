@@ -32,7 +32,7 @@ add_todo() {
 
     local now; now="$(now_local)"
     local today; today="$(today_local)"
-    local parent_sql; parent_sql="$(if [[ -n "$parent_id" ]]; then echo "$parent_id"; else echo "NULL"; fi)"
+    local parent_sql; parent_sql="$(sql_nullable "$parent_id")"
 
     local sql="INSERT INTO todos (title, status, priority, owner, source, source_ref, category, created_date, due_date, last_touched, notes, parent_id)
         VALUES ($(sql_nullable "$title"), 'open', $(sql_nullable "$priority"), NULL, $(sql_nullable "$source"), $(sql_nullable "$source_ref"), $(sql_nullable "$category"), '$today', $(sql_nullable "$due_date"), '$now', $(sql_nullable "$notes"), $parent_sql);"
@@ -40,7 +40,7 @@ add_todo() {
     local select_sql="SELECT * FROM todos WHERE id = last_insert_rowid();"
 
     local record
-    record="$(db_write_and_return "$TODOS_DB" "$sql" "$select_sql")"
+    record="$(db_write_and_return "$TODOS_DB" "$sql" "$select_sql")" || exit 1
 
     local new_id
     new_id="$(echo "$record" | jq -r '.[0].id')"
@@ -57,6 +57,7 @@ update_todo() {
     local params="$1"
     local id; id="$(param "$params" "id")"
     validate_required "id" "$id" "update-todo"
+    validate_integer "id" "$id" "update-todo"
 
     # Fetch current record for changelog
     local old_record
@@ -93,7 +94,7 @@ update_todo() {
     local select_sql="SELECT * FROM todos WHERE id = $id;"
 
     local record
-    record="$(db_write_and_return "$TODOS_DB" "$sql" "$select_sql")"
+    record="$(db_write_and_return "$TODOS_DB" "$sql" "$select_sql")" || exit 1
 
     write_changelog "todos" "todos" "UPDATE" "$id" \
         "$changed_fields" \
@@ -108,6 +109,7 @@ complete_todo() {
     local id; id="$(param "$params" "id")"
     local notes; notes="$(param "$params" "notes")"
     validate_required "id" "$id" "complete-todo"
+    validate_integer "id" "$id" "complete-todo"
 
     local old_record
     old_record="$(db_query "$TODOS_DB" "SELECT * FROM todos WHERE id = $id;")"
@@ -137,7 +139,7 @@ complete_todo() {
     local select_sql="SELECT * FROM todos WHERE id = $id;"
 
     local record
-    record="$(db_write_and_return "$TODOS_DB" "$sql" "$select_sql")"
+    record="$(db_write_and_return "$TODOS_DB" "$sql" "$select_sql")" || exit 1
 
     write_changelog "todos" "todos" "UPDATE" "$id" \
         '["status","completed_date","last_touched","notes"]' \
@@ -152,6 +154,7 @@ cancel_todo() {
     local id; id="$(param "$params" "id")"
     local reason; reason="$(param "$params" "reason")"
     validate_required "id" "$id" "cancel-todo"
+    validate_integer "id" "$id" "cancel-todo"
 
     local old_record
     old_record="$(db_query "$TODOS_DB" "SELECT * FROM todos WHERE id = $id;")"
@@ -170,7 +173,7 @@ cancel_todo() {
         old_notes="$(echo "$old_record" | jq -r '.[0].notes // ""')"
         local new_notes="Cancelled: $reason"
         if [[ -n "$old_notes" ]]; then
-            new_notes="$(printf '%s\n%s' "$old_notes" "$new_notes")"
+            new_notes="$(printf '%s\n%s' "$new_notes" "$old_notes")"
         fi
         notes_sql=", notes = $(sql_nullable "$new_notes")"
     fi
@@ -179,7 +182,7 @@ cancel_todo() {
     local select_sql="SELECT * FROM todos WHERE id = $id;"
 
     local record
-    record="$(db_write_and_return "$TODOS_DB" "$sql" "$select_sql")"
+    record="$(db_write_and_return "$TODOS_DB" "$sql" "$select_sql")" || exit 1
 
     write_changelog "todos" "todos" "UPDATE" "$id" \
         '["status","cancelled_date","last_touched","notes"]' \
