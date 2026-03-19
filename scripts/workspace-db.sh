@@ -26,7 +26,7 @@ while [[ $# -gt 0 ]]; do
     case "$1" in
         --action) ACTION="$2"; shift 2 ;;
         --params) PARAMS="$2"; shift 2 ;;
-        *) echo '{"success":false,"error":"Unknown argument: '"$1"'"}'; exit 1 ;;
+        *) jq -n --arg arg "$1" '{"success":false,"error":("Unknown argument: " + $arg)}'; exit 1 ;;
     esac
 done
 
@@ -45,19 +45,19 @@ FUNC_NAME="${ACTION//-/_}"
 # Route to domain script
 case "$ACTION" in
     add-todo|update-todo|complete-todo|cancel-todo|list-todos)
-        source "$SCRIPT_DIR/todos.sh"
+        source "$SCRIPT_DIR/todos.sh" || { json_error "Failed to load todos.sh" "$ACTION"; exit 1; }
         ;;
     log-accomplishment|list-accomplishments|export-accomplishments)
-        source "$SCRIPT_DIR/accomplishments.sh"
+        source "$SCRIPT_DIR/accomplishments.sh" || { json_error "Failed to load accomplishments.sh" "$ACTION"; exit 1; }
         ;;
     log-decision|list-decisions)
-        source "$SCRIPT_DIR/decisions.sh"
+        source "$SCRIPT_DIR/decisions.sh" || { json_error "Failed to load decisions.sh" "$ACTION"; exit 1; }
         ;;
     start-run|complete-run|fail-run|list-runs)
-        source "$SCRIPT_DIR/runs.sh"
+        source "$SCRIPT_DIR/runs.sh" || { json_error "Failed to load runs.sh" "$ACTION"; exit 1; }
         ;;
     backup|stats|health)
-        source "$SCRIPT_DIR/db-utils.sh"
+        source "$SCRIPT_DIR/db-utils.sh" || { json_error "Failed to load db-utils.sh" "$ACTION"; exit 1; }
         ;;
     *)
         json_error "Unknown action: $ACTION" "$ACTION"
