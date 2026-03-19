@@ -14,9 +14,9 @@ Create a file in `prompts/` following this template:
 [One sentence]
 ## Context
 - Database: [which databases, via workspace-db.sh actions]
-- Memory: [which memory files to read]
+- Memory: [which memory files to read — omit if not needed]
 ## Instructions
-1. Read `.env` to get `WORKSPACE_DATA_DIR`
+1. [If the prompt reads memory files or data paths: Read `.env` to get `WORKSPACE_DATA_DIR`]
 2. [Steps]
 ## Output
 [Format]

@@ -7,7 +7,7 @@ Turn Claude Code into your personal work assistant with persistent memory, task 
 1. **Prerequisites**: `bash`, `sqlite3`, `jq`, `gh` (GitHub CLI), `git`
 2. **Clone**: `git clone <repo-url> && cd ai-assistant-workspace`
 3. **Setup**: `bash setup/init.sh --data-dir "/path/to/your/cloud-drive/ai-assistant-data"`
-4. **Personalize**: Edit `memory/stable/me.md` and `memory/stable/team.md` in your data directory
+4. **Personalize**: Edit `memory/stable/me.md` and `memory/stable/team.md` in your data directory (the path you passed to `--data-dir`; also stored in `.env`)
 5. **Go**: Open Claude Code in this directory and say **"start my day"**
 
 ## Available Commands
