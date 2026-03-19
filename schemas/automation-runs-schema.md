@@ -42,3 +42,24 @@ INSERT INTO _meta (key, value) VALUES ('schema_version', '1');
 | `completed` | Finished successfully |
 | `partial` | Some steps succeeded before failure (set by fail-run when steps_completed is non-empty) |
 | `failed` | Failed with no successful steps |
+
+## Example Queries
+
+```sql
+-- All runs today
+SELECT * FROM runs WHERE date = date('now', 'localtime') ORDER BY started_at DESC;
+
+-- Last run of a specific automation
+SELECT * FROM runs WHERE automation = 'start-work-day'
+ORDER BY started_at DESC LIMIT 1;
+
+-- Failed/partial runs this week
+SELECT * FROM runs
+WHERE status IN ('failed', 'partial')
+AND date >= date('now', 'localtime', '-7 days')
+ORDER BY date DESC;
+
+-- Run history for an automation with duration
+SELECT date, automation, status, duration_seconds, steps_skipped
+FROM runs ORDER BY started_at DESC LIMIT 20;
+```
